@@ -72,18 +72,19 @@ public class FirewallService {
 
     private void executeUfw(String... args) {
         try {
-            String[] command = new String[args.length + 1];
-            command[0] = "ufw";
+            String[] command = new String[args.length + 3];
 
-            System.arraycopy(
-                    args,
-                    0,
-                    command,
-                    1,
-                    args.length
-            );
+            command[0] = "sudo";
+            command[1] = "-n";
+            command[2] = "/usr/local/bin/homehub-firewall";
+
+            System.arraycopy(args, 0, command, 3, args.length);
 
             Process process = new ProcessBuilder(command).start();
+
+            String output = new String(
+                    process.getInputStream().readAllBytes()
+            );
 
             String error = new String(
                     process.getErrorStream().readAllBytes()
