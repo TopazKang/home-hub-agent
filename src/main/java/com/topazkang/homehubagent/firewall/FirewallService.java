@@ -52,21 +52,18 @@ public class FirewallService {
     public void openIp(String ip) {
         executeUfw(
                 "allow",
-                "from", ip,
-                "to", "any",
-                "port", gamePort,
-                "proto", protocol
+                ip,
+                gamePort,
+                protocol
         );
     }
 
     public void closeIp(String ip) {
         executeUfw(
                 "delete",
-                "allow",
-                "from", ip,
-                "to", "any",
-                "port", gamePort,
-                "proto", protocol
+                ip,
+                gamePort,
+                protocol
         );
     }
 
