@@ -2,6 +2,7 @@ package com.topazkang.homehubagent.node;
 
 import com.topazkang.homehubagent.firewall.FirewallService;
 import com.topazkang.homehubagent.monitor.MonitorService;
+import com.topazkang.homehubagent.monitor.NodeStatus;
 import com.topazkang.homehubagent.node.dto.NodeJoinRequest;
 import com.topazkang.homehubagent.runtime.RuntimeService;
 import lombok.RequiredArgsConstructor;
@@ -19,7 +20,7 @@ public class NodeService {
 
     public void joinNode(NodeJoinRequest request){
 
-        if (!monitorService.checkAlive()){
+        if (monitorService.getStatus() == NodeStatus.OFFLINE){
             runtimeService.startUp();
         }
 
