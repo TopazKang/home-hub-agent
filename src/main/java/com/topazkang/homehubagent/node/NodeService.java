@@ -7,6 +7,8 @@ import com.topazkang.homehubagent.runtime.RuntimeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import javax.swing.plaf.basic.BasicInternalFrameTitlePane;
+
 @Service
 @RequiredArgsConstructor
 public class NodeService {
@@ -24,5 +26,7 @@ public class NodeService {
         if (!firewallService.checkIpOpen(request.ip())){
             firewallService.openIp(request.ip());
         }
+
+        System.out.println(request);
     }
 }
