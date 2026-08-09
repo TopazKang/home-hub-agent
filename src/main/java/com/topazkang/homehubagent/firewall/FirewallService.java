@@ -20,7 +20,9 @@ public class FirewallService {
     public boolean checkIpOpen(String ip) {
         try {
             Process process = new ProcessBuilder(
-                    "ufw",
+                    "sudo",
+                    "-n",
+                    "/usr/local/bin/homehub-firewall",
                     "status"
             ).start();
 
