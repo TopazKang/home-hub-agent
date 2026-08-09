@@ -6,10 +6,6 @@ server:
   port: ${SERVER_PORT:8081}
 
 node:
-  port: ${NODE_PORT:8021}
   container-name: ${NODE_CONTAINER_NAME:palworld}
   game-port: ${GAME_PORT:8211}
   protocol: ${GAME_PROTOCOL:udp}
-
-docker:
-  host: ${DOCKER_HOST:unix:///Users/topazkang/Library/Containers/com.docker.docker/Data/docker-cli.sock}
