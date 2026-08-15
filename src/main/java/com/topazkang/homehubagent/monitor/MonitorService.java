@@ -5,6 +5,7 @@ import com.topazkang.homehubagent.event.PlayerEmptyEvent;
 import com.topazkang.homehubagent.event.RuntimeEventListener;
 import com.topazkang.homehubagent.runtime.RuntimeService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -13,7 +14,8 @@ public class MonitorService {
 
     private final RuntimeService runtimeService;
     private final MonitorClient monitorClient;
-    private final RuntimeEventListener runtimeEventListener;
+    private final ApplicationEventPublisher eventPublisher;
+
 
     private volatile NodeStatus currentStatus = NodeStatus.OFFLINE;
 
@@ -21,6 +23,11 @@ public class MonitorService {
 
     public void polling() {
         currentStatus = runtimeService.checkAlive();
+
+        if (currentStatus == NodeStatus.OFFLINE) {
+            previousPlayerCount = null;
+            return;
+        }
 
         NodeMetrics metrics = monitorClient.getMetrics();
         int current = metrics.playerCount();
@@ -30,7 +37,7 @@ public class MonitorService {
             previousPlayerCount = current;
 
             if (current == 0) {
-                runtimeEventListener.onPlayerEmpty(new PlayerEmptyEvent());
+                eventPublisher.publishEvent(new PlayerEmptyEvent());
             }
 
             return;
@@ -38,12 +45,12 @@ public class MonitorService {
 
         // N → 0
         if (previousPlayerCount > 0 && current == 0) {
-            runtimeEventListener.onPlayerEmpty(new PlayerEmptyEvent());
+            eventPublisher.publishEvent(new PlayerEmptyEvent());
         }
 
         // 0 → N
         if (previousPlayerCount == 0 && current > 0) {
-            runtimeEventListener.onPlayerActive(new PlayerActiveEvent());
+            eventPublisher.publishEvent(new PlayerActiveEvent());
         }
 
         previousPlayerCount = current;
