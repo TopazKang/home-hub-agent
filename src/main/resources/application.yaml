@@ -9,3 +9,9 @@ node:
   container-name: ${NODE_CONTAINER_NAME:palworld}
   game-port: ${GAME_PORT:8211}
   protocol: ${GAME_PROTOCOL:udp}
+
+palworld:
+  rest-api:
+    url: ${PALWORLD_URL:http://localhost:8212}
+    username: ${PALWORLD_USERNAME:admin}
+    password: ${PALWORLD_PASSWORD}

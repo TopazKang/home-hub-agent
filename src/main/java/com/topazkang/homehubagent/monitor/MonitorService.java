@@ -9,15 +9,24 @@ import org.springframework.stereotype.Service;
 public class MonitorService {
 
     private final RuntimeService runtimeService;
+    private final MonitorClient monitorClient;
 
     private volatile NodeStatus currentStatus = NodeStatus.OFFLINE;
 
     public void polling() {
         currentStatus = runtimeService.checkAlive();
-        System.out.println(currentStatus);
+
+        NodeMetrics nodeMetrics = monitorClient.getMetrics();
+        if (nodeMetrics.playerCount() == 0){
+            // Event추가
+        }
     }
 
     public NodeStatus getStatus() {
         return currentStatus;
+    }
+
+    public NodeMetrics getMetrics() {
+        return monitorClient.getMetrics();
     }
 }
