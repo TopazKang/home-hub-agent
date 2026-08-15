@@ -16,8 +16,8 @@ public class MonitorService {
     private final MonitorClient monitorClient;
     private final ApplicationEventPublisher eventPublisher;
 
-
     private volatile NodeStatus currentStatus = NodeStatus.OFFLINE;
+    private volatile NodeMetrics currentMetrics;
 
     private Integer previousPlayerCount = null;
 
@@ -26,13 +26,15 @@ public class MonitorService {
 
         if (currentStatus == NodeStatus.OFFLINE) {
             previousPlayerCount = null;
+            currentMetrics = null;
             return;
         }
 
         NodeMetrics metrics = monitorClient.getMetrics();
+        currentMetrics = metrics;
+
         int current = metrics.playerCount();
 
-        // 최초 조회
         if (previousPlayerCount == null) {
             previousPlayerCount = current;
 
@@ -43,12 +45,10 @@ public class MonitorService {
             return;
         }
 
-        // N → 0
         if (previousPlayerCount > 0 && current == 0) {
             eventPublisher.publishEvent(new PlayerEmptyEvent());
         }
 
-        // 0 → N
         if (previousPlayerCount == 0 && current > 0) {
             eventPublisher.publishEvent(new PlayerActiveEvent());
         }
@@ -61,6 +61,6 @@ public class MonitorService {
     }
 
     public NodeMetrics getMetrics() {
-        return monitorClient.getMetrics();
+        return currentMetrics;
     }
 }
