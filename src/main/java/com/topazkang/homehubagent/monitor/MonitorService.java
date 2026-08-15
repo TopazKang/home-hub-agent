@@ -1,5 +1,6 @@
 package com.topazkang.homehubagent.monitor;
 
+import com.topazkang.homehubagent.event.PlayerActiveEvent;
 import com.topazkang.homehubagent.event.PlayerEmptyEvent;
 import com.topazkang.homehubagent.event.RuntimeEventListener;
 import com.topazkang.homehubagent.runtime.RuntimeService;
@@ -29,7 +30,7 @@ public class MonitorService {
             previousPlayerCount = current;
 
             if (current == 0) {
-                runtimeEventListener.publishEvent(new PlayerEmptyEvent());
+                runtimeEventListener.onPlayerEmpty(new PlayerEmptyEvent());
             }
 
             return;
@@ -37,12 +38,12 @@ public class MonitorService {
 
         // N → 0
         if (previousPlayerCount > 0 && current == 0) {
-            runtimeEventListener.publishEvent(new PlayerEmptyEvent());
+            runtimeEventListener.onPlayerEmpty(new PlayerEmptyEvent());
         }
 
         // 0 → N
         if (previousPlayerCount == 0 && current > 0) {
-            runtimeEventListener.publishEvent(new PlayerActiveEvent());
+            runtimeEventListener.onPlayerActive(new PlayerActiveEvent());
         }
 
         previousPlayerCount = current;
