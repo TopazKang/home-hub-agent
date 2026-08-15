@@ -12,6 +12,6 @@ node:
 
 palworld:
   rest-api:
-    url: ${PALWORLD_URL:http://localhost:8212}
+    url: ${PALWORLD_URL:http://192.168.0.28:8212}
     username: ${PALWORLD_USERNAME:admin}
     password: ${PALWORLD_PASSWORD}

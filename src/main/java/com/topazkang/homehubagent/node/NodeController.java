@@ -17,7 +17,7 @@ public class NodeController {
         nodeService.joinNode(request);
     }
 
-    @GetMapping("/info}")
+    @GetMapping("/info")
     public NodeMetrics getInfo(){
         return nodeService.getMetricInfo();
     }
