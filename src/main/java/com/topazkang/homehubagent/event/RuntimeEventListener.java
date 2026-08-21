@@ -28,7 +28,7 @@ public class RuntimeEventListener {
 
         shutdownTask = taskScheduler.schedule(
                 runtimeService::shutDown,
-                Instant.now().plus(Duration.ofMinutes(10))
+                Instant.now().plus(Duration.ofMinutes(60))
         );
     }
 
